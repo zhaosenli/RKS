@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon, Wizard, Knight Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8efd4, #d9a7c7);
+            margin: 0;
+        }
+
+        h1 {
+            color: #3e3e3e;
+            margin-bottom: 20px;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .choice {
+            width: 100px;
+            height: 100px;
+            margin: 0 15px;
+            cursor: pointer;
+            border: 2px solid #3e3e3e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .choice:hover {
+            transform: scale(1.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .result {
+            font-size: 1.5em;
+            color: #3e3e3e;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .animate-choice {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Dragon, Wizard, Knight Game</h1>
+    <div class="choices">
+        <img src="Annotation 2024-12-20 114732.png" alt="Dragon" class="choice" data-choice="dragon">
+        <img src="Annotation 2024-12-20 114832.png" alt="Wizard" class="choice" data-choice="wizard">
+        <img src="Annotation 2024-12-20 114812.png" alt="Knight" class="choice" data-choice="knight">
+    </div>
+    <div class="result" id="result"></div>
+
+    <script>
+        const choices = document.querySelectorAll('.choice');
+        const resultDiv = document.getElementById('result');
+        const choicesArray = ['dragon', 'wizard', 'knight'];
+
+        choices.forEach(choice => {
+            choice.addEventListener('click', () => {
+                choices.forEach(c => c.classList.remove('animate-choice'));
+                choice.classList.add('animate-choice');
+                const userChoice = choice.dataset.choice;
+                const computerChoice = choicesArray[Math.floor(Math.random() * 3)];
+                determineWinner(userChoice, computerChoice);
+            });
+        });
+
+        function determineWinner(user, computer) {
+            let resultText = '';
+
+            if (user === computer) {
+                resultText = `It's a tie! You both chose ${user}.`;
+            } else if (
+                (user === 'dragon' && computer === 'wizard') ||
+                (user === 'wizard' && computer === 'knight') ||
+                (user === 'knight' && computer === 'dragon')
+            ) {
+                resultText = `You win! ${user} beats ${computer}.`;
+            } else {
+                resultText = `You lose! ${computer} beats ${user}.`;
+            }
+
+            resultDiv.textContent = resultText;
+            resultDiv.classList.remove('animate-result');
+            void resultDiv.offsetWidth; // Trigger reflow
+            resultDiv.classList.add('result', 'animate-result');
+        }
+    </script>
+</body>
+</html>
